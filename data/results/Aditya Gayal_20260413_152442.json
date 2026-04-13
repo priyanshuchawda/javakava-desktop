@@ -1,0 +1,12 @@
+{
+  "student": "Aditya Gayal",
+  "score": -1,
+  "totalQuestions": 5,
+  "accuracy": 0.00,
+  "topicPerformance": {
+    "OOP": 0.00,
+    "Java Basics": 0.00,
+    "Java Collections": 0.00,
+    "Networking": 0.00
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "student": "Aditya",
+  "score": -1,
+  "totalQuestions": 5,
+  "accuracy": 0.00,
+  "topicPerformance": {
+    "Exceptions": 0.00,
+    "OOP": 0.00,
+    "Java Collections": 0.00,
+    "Swing": 0.00
+  }
+}

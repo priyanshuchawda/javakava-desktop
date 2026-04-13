@@ -1,0 +1,63 @@
+{
+  "title": "AI Database Management System Test",
+  "subject": "Database Management System",
+  "classLevel": "General",
+  "tags": ["database management system", "ai-generated"],
+  "difficultyProfile": "Mixed",
+  "timePerQuestionSeconds": 30,
+  "fullTestTimerMode": false,
+  "fullTestTimeSeconds": 0,
+  "negativeMarkingEnabled": true,
+  "published": false,
+  "version": 1,
+  "randomizeQuestionOrder": false,
+  "randomizeOptionOrder": false,
+  "maxAttemptsPerStudent": 0,
+  "questions": [
+  {
+    "question": "Which of the following ACID properties ensures that a transaction's changes are either all committed or none are?",
+    "options": ["Atomicity", "Consistency", "Isolation", "Durability"],
+    "correctAnswer": "Atomicity",
+    "explanation": "Atomicity ensures that transactions are treated as single, indivisible units of work.",
+    "topic": "Database Management System",
+    "difficulty": "Medium",
+    "mandatory": true
+  },
+  {
+    "question": "In database normalization, which normal form (NF) eliminates transitive dependencies?",
+    "options": ["First Normal Form (1NF)", "Second Normal Form (2NF)", "Third Normal Form (3NF)", "Boyce-Codd Normal Form (BCNF)"],
+    "correctAnswer": "Third Normal Form (3NF)",
+    "explanation": "3NF removes transitive dependencies, where a non-key attribute depends on another non-key attribute.",
+    "topic": "Database Management System",
+    "difficulty": "Medium",
+    "mandatory": true
+  },
+  {
+    "question": "Which type of SQL JOIN returns all rows from the left table, and the matching rows from the right table?",
+    "options": ["INNER JOIN", "RIGHT JOIN", "FULL OUTER JOIN", "LEFT JOIN"],
+    "correctAnswer": "LEFT JOIN",
+    "explanation": "A LEFT JOIN returns all rows from the left table and matching rows from the right table.",
+    "topic": "Database Management System",
+    "difficulty": "Medium",
+    "mandatory": true
+  },
+  {
+    "question": "Which of the following ACID properties ensures that a transaction's changes are either all committed or all rolled back?",
+    "options": ["Atomicity", "Consistency", "Isolation", "Durability"],
+    "correctAnswer": "Atomicity",
+    "explanation": "Atomicity ensures that transactions are treated as single, indivisible units of work.",
+    "topic": "Database Management System",
+    "difficulty": "Medium",
+    "mandatory": true
+  },
+  {
+    "question": "In a relational database, which type of key uniquely identifies each record in a table and cannot contain NULL values?",
+    "options": ["Foreign Key", "Candidate Key", "Primary Key", "Super Key"],
+    "correctAnswer": "Primary Key",
+    "explanation": "A Primary Key uniquely identifies each row in a table and must contain unique, non-null values.",
+    "topic": "Database Management System",
+    "difficulty": "Medium",
+    "mandatory": true
+  }
+]
+}

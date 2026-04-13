@@ -1,0 +1,42 @@
+[
+  {
+    "question": "Which principle hides internal implementation details and exposes only required behavior?",
+    "options": ["Inheritance", "Polymorphism", "Encapsulation", "Abstraction"],
+    "correctAnswer": "Abstraction",
+    "explanation": "Abstraction focuses on what an object does rather than how it does it.",
+    "topic": "OOP",
+    "difficulty": "Easy"
+  },
+  {
+    "question": "Which Java collection allows key-value mappings?",
+    "options": ["ArrayList", "HashMap", "HashSet", "Queue"],
+    "correctAnswer": "HashMap",
+    "explanation": "HashMap stores data as key-value pairs.",
+    "topic": "Java Collections",
+    "difficulty": "Easy"
+  },
+  {
+    "question": "What is the time complexity of average lookup in a HashMap?",
+    "options": ["O(1)", "O(n)", "O(log n)", "O(n log n)"],
+    "correctAnswer": "O(1)",
+    "explanation": "HashMap average-case lookup is constant time due to hashing.",
+    "topic": "Java Collections",
+    "difficulty": "Medium"
+  },
+  {
+    "question": "Which exception is checked in Java?",
+    "options": ["NullPointerException", "IOException", "ArithmeticException", "IndexOutOfBoundsException"],
+    "correctAnswer": "IOException",
+    "explanation": "IOException is a checked exception and must be handled or declared.",
+    "topic": "Exceptions",
+    "difficulty": "Medium"
+  },
+  {
+    "question": "Which Swing layout manager arranges components in five regions?",
+    "options": ["GridLayout", "FlowLayout", "BorderLayout", "BoxLayout"],
+    "correctAnswer": "BorderLayout",
+    "explanation": "BorderLayout uses NORTH, SOUTH, EAST, WEST, and CENTER regions.",
+    "topic": "Swing",
+    "difficulty": "Easy"
+  }
+]

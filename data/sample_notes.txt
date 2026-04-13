@@ -1,0 +1,8 @@
+Object-oriented programming in Java is based on classes and objects.
+Encapsulation protects object state by making fields private and exposing methods.
+Inheritance allows code reuse using the extends keyword.
+Polymorphism allows methods to behave differently based on object type.
+Abstraction focuses on essential behavior while hiding implementation details.
+Java collections include List, Set, and Map interfaces.
+HashMap is used for key-value storage and HashSet stores unique items.
+Exception handling uses try, catch, finally, and throws.

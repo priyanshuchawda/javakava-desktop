@@ -1,0 +1,63 @@
+{
+  "title": "AI micro organisms Test",
+  "subject": "micro organisms",
+  "classLevel": "General",
+  "tags": ["micro organisms", "ai-generated"],
+  "difficultyProfile": "Mixed",
+  "timePerQuestionSeconds": 30,
+  "fullTestTimerMode": false,
+  "fullTestTimeSeconds": 0,
+  "negativeMarkingEnabled": true,
+  "published": false,
+  "version": 1,
+  "randomizeQuestionOrder": false,
+  "randomizeOptionOrder": false,
+  "maxAttemptsPerStudent": 0,
+  "questions": [
+  {
+    "question": "Which of the following is NOT typically classified as a microorganism?",
+    "options": ["Bacteria", "Fungi", "Viruses", "Insects"],
+    "correctAnswer": "Insects",
+    "explanation": "Insects are multicellular organisms, visible to the naked eye, unlike microorganisms.",
+    "topic": "micro organisms",
+    "difficulty": "Medium",
+    "mandatory": true
+  },
+  {
+    "question": "What is the primary role of decomposer microorganisms in an ecosystem?",
+    "options": ["Producing oxygen", "Fixing atmospheric nitrogen", "Breaking down dead organic matter", "Synthesizing complex sugars"],
+    "correctAnswer": "Breaking down dead organic matter",
+    "explanation": "Decomposers recycle nutrients by breaking down dead organisms and waste products.",
+    "topic": "micro organisms",
+    "difficulty": "Medium",
+    "mandatory": true
+  },
+  {
+    "question": "Which process uses heat to kill harmful microorganisms in liquids like milk, without significantly altering its taste or nutritional value?",
+    "options": ["Fermentation", "Pasteurization", "Filtration", "Desiccation"],
+    "correctAnswer": "Pasteurization",
+    "explanation": "Pasteurization uses controlled heat to kill pathogens and extend shelf life.",
+    "topic": "micro organisms",
+    "difficulty": "Medium",
+    "mandatory": true
+  },
+  {
+    "question": "Which type of microorganism is primarily responsible for nitrogen fixation in soil and is also a common cause of bacterial infections?",
+    "options": ["Viruses", "Fungi", "Bacteria", "Protozoa"],
+    "correctAnswer": "Bacteria",
+    "explanation": "Bacteria are vital for nitrogen fixation and are a major group of pathogens causing various infections.",
+    "topic": "micro organisms",
+    "difficulty": "Medium",
+    "mandatory": true
+  },
+  {
+    "question": "Which of the following microorganisms lacks a cellular structure and can only reproduce inside living host cells?",
+    "options": ["Bacteria", "Fungi", "Viruses", "Algae"],
+    "correctAnswer": "Viruses",
+    "explanation": "Viruses are acellular and obligate intracellular parasites, meaning they require a host cell to replicate.",
+    "topic": "micro organisms",
+    "difficulty": "Medium",
+    "mandatory": true
+  }
+]
+}
