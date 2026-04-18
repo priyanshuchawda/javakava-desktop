@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 public final class EnvLoader {
@@ -43,5 +44,37 @@ public final class EnvLoader {
         } catch (IOException ignored) {
             // Ignore .env loading errors and continue with existing environment variables.
         }
+    }
+
+    public static void saveGeminiApiKey(String filePath, String apiKey) throws IOException {
+        if (apiKey == null || apiKey.isBlank()) {
+            throw new IllegalArgumentException("API key cannot be empty.");
+        }
+
+        Path path = Paths.get(filePath);
+        List<String> lines = Files.exists(path)
+                ? Files.readAllLines(path, StandardCharsets.UTF_8)
+                : new ArrayList<>();
+
+        List<String> updated = new ArrayList<>();
+        boolean replaced = false;
+        for (String line : lines) {
+            String trimmed = line.trim();
+            if (trimmed.startsWith("GEMINI_API_KEY=")) {
+                if (!replaced) {
+                    updated.add("GEMINI_API_KEY=" + apiKey.trim());
+                    replaced = true;
+                }
+                continue;
+            }
+            updated.add(line);
+        }
+
+        if (!replaced) {
+            updated.add("GEMINI_API_KEY=" + apiKey.trim());
+        }
+
+        Files.write(path, updated, StandardCharsets.UTF_8);
+        System.setProperty("GEMINI_API_KEY", apiKey.trim());
     }
 }

@@ -5,6 +5,7 @@ import model.Quiz;
 import model.Student;
 import service.GeminiService;
 import service.QuizService;
+import utils.EnvLoader;
 import utils.FileHandler;
 
 import javax.swing.*;
@@ -227,10 +228,14 @@ public class DashboardUI extends JFrame {
         notes.setBorder(new EmptyBorder(8, 8, 8, 8));
 
         JButton generateBtn = createButton("Generate AI Test", accent);
+        JButton apiKeyBtn = createButton("Set Gemini API Key", accent);
+        apiKeyBtn.setToolTipText("Save your Gemini API key in local .env");
         generateBtn.addActionListener(e -> generateAiQuiz(generateBtn));
+        apiKeyBtn.addActionListener(e -> promptAndSaveGeminiApiKey());
 
         JPanel rightBottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         rightBottom.setBackground(card);
+        rightBottom.add(apiKeyBtn);
         rightBottom.add(generateBtn);
 
         right.add(aiTitle, BorderLayout.NORTH);
@@ -407,6 +412,10 @@ public class DashboardUI extends JFrame {
     }
 
     private void generateAiQuiz(JButton generateBtn) {
+        if (!ensureGeminiApiKeyConfigured()) {
+            return;
+        }
+
         String topic = topicField.getText().trim();
         if (topic.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Topic is required.", "Validation", JOptionPane.WARNING_MESSAGE);
@@ -529,6 +538,67 @@ public class DashboardUI extends JFrame {
         };
 
         worker.execute();
+    }
+
+    private boolean ensureGeminiApiKeyConfigured() {
+        String apiKey = readConfig("GEMINI_API_KEY");
+        if (apiKey != null && !apiKey.isBlank()) {
+            return true;
+        }
+
+        int choice = JOptionPane.showConfirmDialog(
+                this,
+                "Gemini API key is not configured.\nDo you want to set it now?",
+                "Gemini API Key Required",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+        if (choice != JOptionPane.YES_OPTION) {
+            return false;
+        }
+
+        return promptAndSaveGeminiApiKey();
+    }
+
+    private boolean promptAndSaveGeminiApiKey() {
+        JPasswordField apiKeyField = new JPasswordField();
+        int result = JOptionPane.showConfirmDialog(
+                this,
+                apiKeyField,
+                "Enter Gemini API Key",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
+        );
+        if (result != JOptionPane.OK_OPTION) {
+            return false;
+        }
+
+        String apiKey = new String(apiKeyField.getPassword()).trim();
+        if (apiKey.isBlank()) {
+            JOptionPane.showMessageDialog(this, "API key cannot be empty.", "Validation", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        try {
+            EnvLoader.saveGeminiApiKey(".env", apiKey);
+            JOptionPane.showMessageDialog(this, "Gemini API key saved to .env", "Saved", JOptionPane.INFORMATION_MESSAGE);
+            return true;
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Failed to save API key: " + ex.getMessage(), "Save Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+    private String readConfig(String key) {
+        String env = System.getenv(key);
+        if (env != null && !env.isBlank()) {
+            return env;
+        }
+        String prop = System.getProperty(key);
+        if (prop != null && !prop.isBlank()) {
+            return prop;
+        }
+        return null;
     }
 
     private List<Question> sanitizeQuestions(List<Question> input, String defaultTopic, int maxCount) {

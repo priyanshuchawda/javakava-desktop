@@ -45,6 +45,8 @@ A Java Swing quiz application with AI-assisted MCQ generation using Gemini.
    GEMINI_API_KEY=your_key_here
    ```
 
+You can also set/update the key inside the app from Dashboard using **Set Gemini API Key**.
+
 ## Run the app
 
 ```bash
@@ -77,6 +79,49 @@ Run packaged app:
 
 ```bash
 ./dist/JavaKava/bin/JavaKava
+```
+
+## Install for end users (from GitHub Releases)
+
+1. Download `JavaKava-linux-app-image.tar.gz` from the latest release.
+2. Extract it:
+   ```bash
+   tar -xzf JavaKava-linux-app-image.tar.gz
+   ```
+3. Go into extracted folder and run:
+   ```bash
+   ./JavaKava/bin/JavaKava
+   ```
+4. On first AI usage, set API key:
+   - Click **Set Gemini API Key** in Dashboard, or
+   - create `.env` with `GEMINI_API_KEY=...` in the launch directory.
+
+Optional local install shortcut:
+
+```bash
+mkdir -p ~/.local/opt/JavaKava ~/.local/bin
+rsync -a --delete JavaKava/ ~/.local/opt/JavaKava/
+ln -sf ~/.local/opt/JavaKava/bin/JavaKava ~/.local/bin/javakava
+javakava
+```
+
+## Publish a GitHub Release (maintainer)
+
+Build artifacts:
+
+```bash
+./scripts/package-linux-app-image.sh 1.0.1
+```
+
+Create tag + release and upload artifacts:
+
+```bash
+gh release create v1.0.1 \
+  dist/JavaKava-linux-app-image.tar.gz \
+  dist/javakava.jar \
+  --repo priyanshuchawda/javakava-desktop \
+  --title "JavaKava v1.0.1" \
+  --notes "Linux no-JDK package + runnable JAR."
 ```
 
 ## Run Gemini smoke test
