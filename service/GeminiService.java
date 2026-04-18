@@ -21,7 +21,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public class GeminiService {
-    private static final String DEFAULT_MODEL = "gemini-2.5-flash";
+    private static final String FIXED_MODEL = "gemini-2.5-flash";
     private static final int MAX_OUTPUT_TOKENS = 1400;
     private static final int MAX_RETRIES = 0;
     private static final long CACHE_TTL_MILLIS = 15 * 60 * 1000;
@@ -195,12 +195,7 @@ public class GeminiService {
             return new ArrayList<>();
         }
 
-        String model = getConfig("GEMINI_MODEL");
-        if (model == null || model.isBlank()) {
-            model = DEFAULT_MODEL;
-        }
-
-        String[] modelCandidates = new String[]{model};
+        String[] modelCandidates = new String[]{FIXED_MODEL};
 
         for (String selectedModel : modelCandidates) {
             String endpoint = "https://generativelanguage.googleapis.com/v1beta/models/" + selectedModel + ":generateContent";
