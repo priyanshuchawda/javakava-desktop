@@ -21,7 +21,11 @@ import java.util.Locale;
 import java.util.Map;
 
 public class GeminiService {
-    private static final String FIXED_MODEL = "gemini-2.5-flash";
+    private static final String[] MODEL_CANDIDATES = new String[]{
+            "gemini-3.1-flash-lite-preview",
+            "gemini-3-flash-preview",
+            "gemini-2.5-flash"
+    };
     private static final int MAX_OUTPUT_TOKENS = 1400;
     private static final int MAX_RETRIES = 0;
     private static final long CACHE_TTL_MILLIS = 15 * 60 * 1000;
@@ -161,10 +165,21 @@ public class GeminiService {
     }
 
     private List<Question> generateMCQs(String prompt, String cacheKey, int expectedCount) {
-        String requestJson = "{\"contents\":[{\"parts\":[{\"text\":\"" + escape(prompt) + "\"}]}]," +
+        String strictPrompt = buildStrictMcqPrompt(prompt, expectedCount);
+        String requestJson = "{\"contents\":[{\"parts\":[{\"text\":\"" + escape(strictPrompt) + "\"}]}]," +
                 "\"generationConfig\":{\"temperature\":0.2,\"topP\":0.8,\"candidateCount\":1,\"maxOutputTokens\":" +
                 MAX_OUTPUT_TOKENS + ",\"responseMimeType\":\"application/json\"}}";
         return executeRequestWithRetry(requestJson, cacheKey, Math.max(1, expectedCount));
+    }
+
+    private String buildStrictMcqPrompt(String prompt, int expectedCount) {
+        int safeExpected = Math.max(1, expectedCount);
+        return "You are a quiz generator. Output must be strict JSON only with no markdown, no preface, and no trailing text. " +
+                "Return exactly " + safeExpected + " MCQ objects in a JSON array. Each object must include keys: " +
+                "question, options, correctAnswer, explanation, topic, difficulty. options must be an array of exactly 4 strings. " +
+                "correctAnswer must exactly match one option. Keep explanations concise and factual. " +
+                "If unsure, still return valid JSON with best-effort questions. " +
+                "Task: " + prompt;
     }
 
     private List<Question> executeRequestWithRetry(String requestJson, String cacheKey, int expectedCount) {
@@ -195,7 +210,7 @@ public class GeminiService {
             return new ArrayList<>();
         }
 
-        String[] modelCandidates = new String[]{FIXED_MODEL};
+        String[] modelCandidates = MODEL_CANDIDATES;
 
         for (String selectedModel : modelCandidates) {
             String endpoint = "https://generativelanguage.googleapis.com/v1beta/models/" + selectedModel + ":generateContent";
@@ -220,7 +235,7 @@ public class GeminiService {
                         String generatedText = extractGeneratedText(response.body());
                         if (generatedText.isBlank()) {
                             lastErrorMessage = "Gemini response did not contain quiz content.";
-                            return new ArrayList<>();
+                            break;
                         }
 
                         List<Question> questions;
@@ -280,8 +295,8 @@ public class GeminiService {
                         }
                     }
 
-                    lastErrorMessage = "Gemini API error: HTTP " + code;
-                    return new ArrayList<>();
+                    lastErrorMessage = "Gemini API error: HTTP " + code + " on model " + selectedModel + ".";
+                    break;
                 } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                     lastErrorMessage = "Gemini request interrupted.";
@@ -291,7 +306,7 @@ public class GeminiService {
                         sleepQuietly(nextBackoffMillis(attempt, 500));
                         continue;
                     }
-                    lastErrorMessage = "Gemini request failed: " + ex.getMessage();
+                    lastErrorMessage = "Gemini request failed on model " + selectedModel + ": " + ex.getMessage();
                     break;
                 }
             }
