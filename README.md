@@ -81,6 +81,25 @@ Run packaged app:
 ./dist/JavaKava/bin/JavaKava
 ```
 
+## Build no-JDK desktop package (Windows)
+
+This creates a native **app image** that bundles a Java runtime, so end users do **not** need Java installed.
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\package-windows-app-image.ps1 1.0.0
+```
+
+Generated artifacts:
+
+- `dist\JavaKava\` (runnable app image)
+- `dist\JavaKava-windows-app-image.zip` (shareable archive)
+
+Run packaged app:
+
+```powershell
+.\dist\JavaKava\JavaKava.exe
+```
+
 ## Install for end users (from GitHub Releases)
 
 1. Download `JavaKava-linux-app-image.tar.gz` from the latest release.
