@@ -6,9 +6,10 @@ A Java Swing quiz application with AI-assisted MCQ generation using Gemini.
 
 - **Environment setup:** only `GEMINI_API_KEY` is required in `.env`.
 - **Model fallback chain:** automatic fallback in this order:
-  1. `gemini-3.1-flash-lite-preview`
-  2. `gemini-3-flash-preview`
-  3. `gemini-2.5-flash`
+  1. `gemini-3.1-flash-lite` (default)
+  2. `gemini-3.1-flash-lite-preview`
+  3. `gemini-3-flash-preview`
+  4. `gemini-2.5-flash`
 - **Prompting strategy:** strict JSON-first prompting is enforced for reliable parsing:
   - exact question count
   - fixed schema (`question`, `options`, `correctAnswer`, `explanation`, `topic`, `difficulty`)

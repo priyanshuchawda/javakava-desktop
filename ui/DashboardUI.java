@@ -433,14 +433,25 @@ public class DashboardUI extends JFrame {
 
             @Override
             protected Path doInBackground() throws Exception {
-                List<Question> generated = new ArrayList<>(geminiService.generateMixedDifficultyMCQs(topic, totalCount));
-                generated = sanitizeQuestions(generated, topic, totalCount);
+                List<Question> generated = new ArrayList<>();
                 int fillAttempts = 0;
-                while (!generated.isEmpty() && generated.size() < totalCount && fillAttempts < 1) {
+                while (generated.size() < totalCount && fillAttempts < 3) {
                     int missing = totalCount - generated.size();
                     generated.addAll(geminiService.generateMixedDifficultyMCQs(topic, missing));
                     generated = sanitizeQuestions(generated, topic, totalCount);
                     fillAttempts++;
+
+                    if (generated.size() < totalCount) {
+                        long cooldownMillis = geminiService.getCooldownRemainingMillis();
+                        if (cooldownMillis > 0) {
+                            try {
+                                Thread.sleep(cooldownMillis);
+                            } catch (InterruptedException ex) {
+                                Thread.currentThread().interrupt();
+                                throw new IOException("AI generation interrupted while retrying.");
+                            }
+                        }
+                    }
                 }
 
                 aiQuestionCount = generated.size();

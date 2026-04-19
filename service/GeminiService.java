@@ -22,12 +22,13 @@ import java.util.Map;
 
 public class GeminiService {
     private static final String[] MODEL_CANDIDATES = new String[]{
+            "gemini-3.1-flash-lite",
             "gemini-3.1-flash-lite-preview",
             "gemini-3-flash-preview",
             "gemini-2.5-flash"
     };
     private static final int MAX_OUTPUT_TOKENS = 1400;
-    private static final int MAX_RETRIES = 0;
+    private static final int MAX_RETRIES = 2;
     private static final long CACHE_TTL_MILLIS = 15 * 60 * 1000;
     private static final long DISK_CACHE_TTL_MILLIS = 24 * 60 * 60 * 1000;
     private static final long FAILURE_COOLDOWN_MILLIS = 5 * 1000;
@@ -276,7 +277,7 @@ public class GeminiService {
                             sleepQuietly(nextBackoffMillis(attempt, 503));
                             continue;
                         }
-                        cooldownUntilMillis = System.currentTimeMillis() + (FAILURE_COOLDOWN_MILLIS / 2);
+                        cooldownUntilMillis = System.currentTimeMillis() + FAILURE_COOLDOWN_MILLIS;
                         lastErrorMessage = "Gemini service is temporarily unavailable (503) on model " + selectedModel + ". Please retry shortly.";
                         break;
                     }
@@ -306,7 +307,12 @@ public class GeminiService {
                         sleepQuietly(nextBackoffMillis(attempt, 500));
                         continue;
                     }
-                    lastErrorMessage = "Gemini request failed on model " + selectedModel + ": " + ex.getMessage();
+                    if (isTlsHandshakeFailure(ex)) {
+                        lastErrorMessage = "Gemini TLS handshake failed on model " + selectedModel +
+                                ". If running a packaged app image, rebuild runtime with jdk.crypto.ec included.";
+                    } else {
+                        lastErrorMessage = "Gemini request failed on model " + selectedModel + ": " + ex.getMessage();
+                    }
                     break;
                 }
             }
@@ -694,6 +700,18 @@ public class GeminiService {
                 .replace("\\r", "\r")
                 .replace("\\\"", "\"")
                 .replace("\\\\", "\\");
+    }
+
+    private boolean isTlsHandshakeFailure(Throwable ex) {
+        Throwable current = ex;
+        while (current != null) {
+            String message = current.getMessage();
+            if (message != null && message.toLowerCase(Locale.ROOT).contains("handshake_failure")) {
+                return true;
+            }
+            current = current.getCause();
+        }
+        return false;
     }
 
     private List<Question> readDiskCacheEntry(String cacheKey, int expectedCount) {

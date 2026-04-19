@@ -26,6 +26,12 @@ $modules = (jdeps --multi-release 17 --ignore-missing-deps --print-module-deps $
 if ([string]::IsNullOrWhiteSpace($modules)) {
     throw "jdeps did not return required modules."
 }
+$requiredRuntimeModules = @("jdk.crypto.ec")
+foreach ($requiredModule in $requiredRuntimeModules) {
+    if ($modules -notmatch "(^|,)$([Regex]::Escape($requiredModule))(,|$)") {
+        $modules = "$modules,$requiredModule"
+    }
+}
 
 jlink `
   --add-modules $modules `

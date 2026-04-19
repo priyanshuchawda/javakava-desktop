@@ -14,6 +14,12 @@ mkdir -p "$PACKAGE_INPUT_DIR"
 cp "$ROOT_DIR/dist/javakava.jar" "$PACKAGE_INPUT_DIR/javakava.jar"
 
 MODULES="$(jdeps --multi-release 21 --ignore-missing-deps --print-module-deps "$ROOT_DIR/dist/javakava.jar")"
+for required_module in jdk.crypto.ec; do
+  case ",$MODULES," in
+    *,"$required_module",*) ;;
+    *) MODULES="$MODULES,$required_module" ;;
+  esac
+done
 jlink \
   --add-modules "$MODULES" \
   --output "$RUNTIME_DIR" \
